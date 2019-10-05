@@ -1,6 +1,6 @@
 # RawBot
 a simple Twitch bot in nodejs
 
-change the oauth token. Add plain text file named oauth with your token
+Provide twitch oauth api key through env key __oauth_key__
 # launch
 npm start

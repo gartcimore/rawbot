@@ -2,8 +2,7 @@ const tmi = require('tmi.js');
 
 const specials_words = require('./words.js');
 
-const fs = require('fs');
-const oauth = fs.readFileSync('oauth', 'utf8').toString();
+const oauth_key = process.env.oauth_key;
 const tmiConfig = {
     options: {
         debug: true
@@ -13,7 +12,7 @@ const tmiConfig = {
     },
     identity: {
         username: "gorawbot",
-        password: oauth
+        password: oauth_key
     },
     channels: [
         "gartcimore"
