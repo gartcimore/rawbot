@@ -1,10 +1,10 @@
 {
   "name": "rawbot",
   "version": "1.0.0",
-  "main": "rawbot.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node rawbot.js",
-    "test": "jshint rawbot.js"
+    "start": "node index.js",
+    "test": "jshint index.js"
   },
   "author": "gart.algar@gmail.com",
   "license": "MIT",
