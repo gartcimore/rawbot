@@ -4,7 +4,11 @@ const specials_words = require('./words.js');
 
 const fastify = require('fastify')({
   logger: true
-})
+});
+
+const oauth_key = process.env.oauth_key;
+
+var channels = [];
 
 const tmiConfig = {
     options: {
@@ -17,35 +21,43 @@ const tmiConfig = {
         username: "gorawbot",
         password: oauth_key
     },
-    channels: [
-        "gartcimore"
-    ]
+    channels: channels
 };
 
-const oauth_key = process.env.oauth_key;
 
 
 const prefix = "!";
 
-var channels = ["gartcimore"];
+
+fastify.get('/', function (request, reply) {
+    reply.send("RawBot Index page. Go to /channels for a list of channels where I sit")
+});
 
 // Declare a route
 fastify.get('/channels', function (request, reply) {
   reply.send({ channels: channels })
-})
+});
 
 fastify.post('/channels', function (request, reply) {
-  channels.push(request.body);
+  console.log(request.body);
+    for (const channel of request.body) {
+        console.log("found channel "+channel);
+        channels.push(channel.name);
+    }
+  console.log("channels are now "+channels);
+  if(channels.length > 0) {
+      client.connect();
+  }
   reply.send({ channels: channels })
-})
+});
 
 fastify.listen(80, '0.0.0.0', function (err, address) {
   if (err) {
-    fastify.log.error(err)
+    fastify.log.error(err);
     process.exit(1)
   }
   fastify.log.info(`server listening on ${address}`)
-})
+});
 
 
 
@@ -69,7 +81,10 @@ function isBroadcaster(user) {
 
 let client = new tmi.client(tmiConfig);
 
-client.connect();
+if (channels.length > 0) {
+    client.connect();
+}
+
 
 client.on('connected', (address, port) => {
     console.log(`* Connected to ${address}:${port}`);
