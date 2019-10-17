@@ -9,5 +9,11 @@ npm start
 
 # add a channel 
 post an array of channels, even for one channel
+```bash
+curl -d '[{"name":"gartcimore"}]' -H "Content-Type: application/json" -X POST http://localhost:3000/channels
+```
 
-curl -d '[{"name":"gartcimore"}]' -H "Content-Type: application/json" -X POST http://localhost/channels
+# read connected channels
+```bash
+curl -X GET http://localhost:3000/channels
+```
