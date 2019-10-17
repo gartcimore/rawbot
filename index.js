@@ -30,12 +30,12 @@ const prefix = "!";
 
 
 fastify.get('/', function (request, reply) {
-    reply.send("RawBot Index page. Go to /channels for a list of channels where I sit")
+    reply.send("RawBot Index page. Go to /channels for a list of channels where I sit");
 });
 
 // Declare a route
 fastify.get('/channels', function (request, reply) {
-  reply.send({ channels: channels })
+  reply.send({ channels: channels });
 });
 
 fastify.post('/channels', function (request, reply) {
@@ -48,15 +48,15 @@ fastify.post('/channels', function (request, reply) {
   if(channels.length > 0) {
       client.connect();
   }
-  reply.send({ channels: channels })
+  reply.send({ channels: channels });
 });
 
 fastify.listen(80, '0.0.0.0', function (err, address) {
   if (err) {
     fastify.log.error(err);
-    process.exit(1)
+    process.exit(1);
   }
-  fastify.log.info(`server listening on ${address}`)
+  fastify.log.info(`server listening on ${address}`);
 });
 
 
