@@ -3,12 +3,17 @@ const tmi = require('tmi.js');
 const specials_words = require('./words.js');
 
 const fastify = require('fastify')({
-  logger: true
+    logger: true
 });
 
 const oauth_key = process.env.oauth_key;
 
 var port = process.env.port;
+var botName = process.env.name;
+
+if (!botName) {
+    botName = "gorawbot";
+}
 
 var channels = [];
 
@@ -20,7 +25,7 @@ const tmiConfig = {
         reconnect: true
     },
     identity: {
-        username: "gorawbot",
+        username: botName,
         password: oauth_key
     },
     channels: channels
@@ -28,40 +33,39 @@ const tmiConfig = {
 
 const prefix = "!";
 
-if (!port){
-    port=3000;
+if (!port) {
+    port = 3000;
 }
 
 fastify.get('/', function (request, reply) {
-    reply.send("RawBot Index page. Go to /channels for a list of channels where I sit");
+    reply.send("I'm " + botName + ". GET /channels for info where I sit");
 });
 
 // Declare a route
 fastify.get('/channels', function (request, reply) {
-  reply.send({ channels: channels });
+    reply.send({channels: channels});
 });
 
 fastify.post('/channels', function (request, reply) {
-  console.log(request.body);
+    console.log(request.body);
     for (const channel of request.body) {
-        console.log("found channel "+channel);
+        console.log("found channel " + channel);
         channels.push(channel.name);
     }
-  console.log("channels are now "+channels);
-  if(channels.length > 0) {
-      client.connect();
-  }
-  reply.send({ channels: channels });
+    console.log("channels are now " + channels);
+    if (channels.length > 0) {
+        client.connect();
+    }
+    reply.send({channels: channels});
 });
 
 fastify.listen(Number(port), '0.0.0.0', function (err, address) {
-  if (err) {
-    fastify.log.error(err);
-    process.exit(1);
-  }
-  fastify.log.info(`server listening on ${address}`);
+    if (err) {
+        fastify.log.error(err);
+        process.exit(1);
+    }
+    fastify.log.info(`server listening on ${address}`);
 });
-
 
 
 function commandParser(message) {
