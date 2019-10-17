@@ -2,7 +2,10 @@ const tmi = require('tmi.js');
 
 const specials_words = require('./words.js');
 
-const oauth_key = process.env.oauth_key;
+const fastify = require('fastify')({
+  logger: true
+})
+
 const tmiConfig = {
     options: {
         debug: true
@@ -19,7 +22,32 @@ const tmiConfig = {
     ]
 };
 
+const oauth_key = process.env.oauth_key;
+
+
 const prefix = "!";
+
+var channels = ["gartcimore"];
+
+// Declare a route
+fastify.get('/channels', function (request, reply) {
+  reply.send({ channels: channels })
+})
+
+fastify.post('/channels', function (request, reply) {
+  channels.push(request.body);
+  reply.send({ channels: channels })
+})
+
+fastify.listen(80, '0.0.0.0', function (err, address) {
+  if (err) {
+    fastify.log.error(err)
+    process.exit(1)
+  }
+  fastify.log.info(`server listening on ${address}`)
+})
+
+
 
 function commandParser(message) {
     let prefixEscaped = prefix.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");

@@ -9,6 +9,8 @@
   "author": "gart.algar@gmail.com",
   "license": "MIT",
   "dependencies": {
+    "fastify": "^2.10.0",
+    "fastify-plugin": "^1.6.0",
     "tmi.js": "^1.5.0"
   },
   "devDependencies": {
