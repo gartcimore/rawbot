@@ -8,6 +8,8 @@ const fastify = require('fastify')({
 
 const oauth_key = process.env.oauth_key;
 
+var port = process.env.port;
+
 var channels = [];
 
 const tmiConfig = {
@@ -24,10 +26,11 @@ const tmiConfig = {
     channels: channels
 };
 
-
-
 const prefix = "!";
 
+if (!port){
+    port=3000;
+}
 
 fastify.get('/', function (request, reply) {
     reply.send("RawBot Index page. Go to /channels for a list of channels where I sit");
@@ -51,7 +54,7 @@ fastify.post('/channels', function (request, reply) {
   reply.send({ channels: channels });
 });
 
-fastify.listen(80, '0.0.0.0', function (err, address) {
+fastify.listen(Number(port), '0.0.0.0', function (err, address) {
   if (err) {
     fastify.log.error(err);
     process.exit(1);
