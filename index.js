@@ -38,7 +38,7 @@ if (!port) {
 }
 
 fastify.get('/', function (request, reply) {
-var response = `{"name":"$client.getUsername", "channels": $client.getConnectedChannel, "state", "$client.readyState"}`
+var response = `{"name":"$client.getUsername", "channels": $client.getConnectedChannel, "state", "$client.readyState"}`;
   reply
     .code(200)
     .header('Content-Type', 'application/json; charset=utf-8')
