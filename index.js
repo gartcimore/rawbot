@@ -38,12 +38,21 @@ if (!port) {
 }
 
 fastify.get('/', function (request, reply) {
-    reply.send("I'm " + botName + ". GET /channels for info where I sit");
+var response = `{"name":"$client.getUsername", "channels": $client.getConnectedChannel, "state", "$client.readyState"}`;
+  reply
+    .code(200)
+    .header('Content-Type', 'application/json; charset=utf-8')
+    .send(response);
 });
 
 // Declare a route
 fastify.get('/channels', function (request, reply) {
+  if (client.readyState == "CLOSED" || client.readyState == "CLOSING") {
     reply.send({channels: channels});
+  } else {
+    reply.send({channels: client.getConnectedChannel});
+  }
+
 });
 
 fastify.post('/channels', function (request, reply) {
