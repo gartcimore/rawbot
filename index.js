@@ -38,11 +38,11 @@ if (!port) {
 }
 
 fastify.get('/', function (request, reply) {
-var response = `{"name":"$client.getUsername", "channels": $client.getConnectedChannel, "state", "$client.readyState"}`;
-  reply
-    .code(200)
-    .header('Content-Type', 'application/json; charset=utf-8')
-    .send(response);
+    var response = '{"name":"' + client.getUsername + '", "channels": "'
+                   + client.getChannels() + '", "state", "' + client.readyState + '"}';
+    reply.code(200)
+         .header('Content-Type', 'application/json; charset=utf-8')
+         .send(response);
 });
 
 // Declare a route
@@ -50,7 +50,7 @@ fastify.get('/channels', function (request, reply) {
   if (client.readyState == "CLOSED" || client.readyState == "CLOSING") {
     reply.send({channels: channels});
   } else {
-    reply.send({channels: client.getConnectedChannel});
+    reply.send({channels: client.getChannels});
   }
 
 });
@@ -83,16 +83,12 @@ function commandParser(message) {
     return regex.exec(message);
 }
 
-function isSubscriber(user) {
-    return user.subscriber;
+function isSubscriber(user, channel) {
+    return user.subscribersoff(channel)
 }
 
 function isModerator(user) {
     return user.mod;
-}
-
-function isBroadcaster(user) {
-    return user.badges.broadcaster === '1';
 }
 
 let client = new tmi.client(tmiConfig);
@@ -119,16 +115,14 @@ client.on('chat', (channel, user, message, isSelf) => {
             case "bonjour":
                 if (isModerator(user)) {
                     client.say(channel, "Bonjour " + user['display-name'] + ",tu peux utiliser les commandes de modérateurs !");
-                } else if (isBroadcaster(user)) {
-                    client.say(channel, "Bonjour " + user['display-name'] + ",passe un bon stream !");
-                } else if (isSubscriber(user)) {
+                } else if (isSubscriber(user, channel)) {
                     client.say(channel, "Bonjour " + user['display-name'] + ",merci d'avoir souscris à cette chaine !");
                 } else {
                     client.say(channel, "Bonjour à toi " + user['display-name'] + ",sois le bienvenu !");
                 }
                 break;
             case "help":
-                client.say(channel, "aucune commande pour l'instant");
+                client.say(channel, "!bonjour, !help");
                 break;
             default:
                 client.say(channel, "Commande '" + command + "' (" + param + ")' non reconnue. Tapez " + prefix + "help pour la liste des commandes de " + client.getUsername());
