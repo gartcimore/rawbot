@@ -38,8 +38,8 @@ if (!port) {
 }
 
 fastify.get('/', function (request, reply) {
-    var response = '{"name":"' + client.getUsername + '", "channels": "'
-                   + client.getChannels() + '", "state", "' + client.readyState + '"}';
+    var response = '{"name":"' + client.getUsername + '", "channels": "' + client.getChannels() +
+                   '", "state", "' + client.readyState + '"}';
     reply.code(200)
          .header('Content-Type', 'application/json; charset=utf-8')
          .send(response);
@@ -84,7 +84,11 @@ function commandParser(message) {
 }
 
 function isSubscriber(user, channel) {
-    return user.subscribersoff(channel)
+    return user.subscribersoff(channel);
+}
+
+function isBroadcaster(user) {
+    return user.badges.broadcaster === '1';
 }
 
 function isModerator(user) {
@@ -117,6 +121,8 @@ client.on('chat', (channel, user, message, isSelf) => {
                     client.say(channel, "Bonjour " + user['display-name'] + ",tu peux utiliser les commandes de modérateurs !");
                 } else if (isSubscriber(user, channel)) {
                     client.say(channel, "Bonjour " + user['display-name'] + ",merci d'avoir souscris à cette chaine !");
+                } else if (isBroadcaster(user)) {
+                    client.say(channel, "Bonjour " + user['display-name'] + ",passe un bon stream !");
                 } else {
                     client.say(channel, "Bonjour à toi " + user['display-name'] + ",sois le bienvenu !");
                 }
