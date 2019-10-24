@@ -8,6 +8,10 @@
   },
   "author": "gart.algar@gmail.com",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/gartcimore/rawbot.git"
+  },
   "dependencies": {
     "fastify": "^2.10.0",
     "fastify-plugin": "^1.6.0",
