@@ -13,7 +13,7 @@
     "url": "git://github.com/gartcimore/rawbot.git"
   },
   "dependencies": {
-    "fastify": "^2.10.0",
+    "fastify": "^4.28.1",
     "fastify-plugin": "^4.5.0",
     "tmi.js": "^1.5.0"
   },
